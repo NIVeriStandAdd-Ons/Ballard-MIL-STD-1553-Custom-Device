@@ -12,7 +12,7 @@ LabVIEW 2017
 
 ### Built Availability ###
 
-Builds available for VeriStand 2017 , 2018 & 2019 under releases.
+Builds available for VeriStand 2017, 2018 & 2019 under releases.
 
 ### Quality, Limitations ###
 
@@ -31,6 +31,10 @@ This IP is new.
 [OpenG MD5 Digest Library 4.1.1.10 or Higher] vipm://oglib_md5?repo_url=http://www.jkisoft.com/packages
 
 [NI VeriStand Addon Inline-Async-APIs 1.0.0 or Higher] https://github.com/ni/niveristand-custom-device-inline-async-api/releases/tag/v1.0.0
+
+Code uses 1 .NET Assembly compiled into a DLL. The source code is available here:
+
+	Hardware XML File: https://XXXXXXXXXX [TO BE COMPLETED]
 
 VIs must be renamed in BTI1553LV.lvlib to prevent naming collision during compilation see User Readme.rtf
 
