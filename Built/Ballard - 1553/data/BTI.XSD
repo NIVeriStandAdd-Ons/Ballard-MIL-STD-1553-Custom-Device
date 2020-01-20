@@ -1,0 +1,2571 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--Created with Liquid XML 2015 Designer Edition 13.2.2.6003 (http://www.liquid-technologies.com)-->
+<xs:schema xmlns="http://www.ballardtech.com/DatabusSchemas/" xmlns:bti="http://www.ballardtech.com/DatabusSchemas/" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ballardtech.com/DatabusSchemas/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:attributeGroup name="nameIDGroup">
+        <xs:annotation>
+            <xs:documentation>Holds the name and ID of elements</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="ID" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>The ID used as a unique reference to the object.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="name" default="">
+            <xs:annotation>
+                <xs:documentation>The name used as a unique human readable reference to the object.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="0" />
+                    <xs:maxLength value="256" />
+                    <xs:whiteSpace value="preserve" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="channelGroup">
+        <xs:attribute name="hardwareChannel" default="-1">
+            <xs:annotation>
+                <xs:documentation>The actual hardware channel number - each card has multiple cores and each core has multiple channels. -1 may be set as a “Don't Care” value so the application can set the channel number dynamically.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int" />
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="channelBufferMaxSizeKB" default="1024">
+            <xs:annotation>
+                <xs:documentation>The maximum size of the channel sequential monitor buffer which stores data records received and transmitted on the channel.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="512" />
+                    <xs:maxInclusive value="16384" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="message1553Group">
+        <xs:attribute name="enable" default="true" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>Enables message skipping on a message. No effect if bufferMaxEntries is greater than 1.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="dataWipe" default="Zeroes">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines how the data is initialized. Zeroes - the data is initialized to 0, 123 – the data is initialized with incrementing values, CWD - the data is initialized with command word, or None - data initialization is disabled.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Zeroes" />
+                    <xs:enumeration value="CWD" />
+                    <xs:enumeration value="123" />
+                    <xs:enumeration value="None" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="allowErrorInjection" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether a message error can be generated for the message.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="messageBufferIDRef" default="-1" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The ID reference to the message buffer. This ID should match with one of the message buffer IDs defined in message buffers that define the message data words.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLog" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether event log will be generated for the message.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="syncOutput" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether an output sync signal will be generated for the message.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="monitor" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the message will be monitored from the bus. This setting controls the monitoring of the messages if the channel.monitorMode equal to “Selective.” If channel.monitorMode equal to “All”, this setting is ignored.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="timeOrHitCount" default="Time">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the message will record hit count or time tag.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Time" />
+                    <xs:enumeration value="HitCount" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="elapseMinOrMax" default="Elapsetime">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the message will record elapse, min, or max time. They may only be recorded if the attribute timeOrHitCount="Time"</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Elapsetime" />
+                    <xs:enumeration value="Mintime" />
+                    <xs:enumeration value="Maxtime" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="commandWordOne1553Group">
+        <xs:attribute name="taVal1" use="required">
+            <xs:annotation>
+                <xs:documentation>The remote terminal address (0 - 31) represented in 5 bits in the command word 1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="saVal1" use="required">
+            <xs:annotation>
+                <xs:documentation>The sub address (location) of data (0 - 31) represented in 5 bits in the command word 1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="wordCount1" default="1">
+            <xs:annotation>
+                <xs:documentation>The number of data words to expect represented in 5 bits in the command word 1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="32" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="commandWordTwo1553Group">
+        <xs:attribute name="taVal2" use="required">
+            <xs:annotation>
+                <xs:documentation>The remote terminal address (0 - 31) represented in 5 bits in the command word 2.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="saVal2" use="required">
+            <xs:annotation>
+                <xs:documentation>The sub address (location) of data (0 - 31) represented in 5 bits in the command word 2.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="wordCount2" default="1">
+            <xs:annotation>
+                <xs:documentation>The number of data words to expect represented in last 5 bits in the command word 2.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="32" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="wordPos1553Group">
+        <xs:attribute name="wordPos" use="required">
+            <xs:annotation>
+                <xs:documentation>The location within a message of a word error. The word position may be from 0 to 31 indicating a data word, or it may be one of the following: first or second command word, first or second status word.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="CWD1" />
+                    <xs:enumeration value="CWD2" />
+                    <xs:enumeration value="SWD1" />
+                    <xs:enumeration value="SWD2" />
+                    <xs:enumeration value="DWD0" />
+                    <xs:enumeration value="DWD1" />
+                    <xs:enumeration value="DWD2" />
+                    <xs:enumeration value="DWD3" />
+                    <xs:enumeration value="DWD4" />
+                    <xs:enumeration value="DWD5" />
+                    <xs:enumeration value="DWD6" />
+                    <xs:enumeration value="DWD7" />
+                    <xs:enumeration value="DWD8" />
+                    <xs:enumeration value="DWD9" />
+                    <xs:enumeration value="DWD10" />
+                    <xs:enumeration value="DWD11" />
+                    <xs:enumeration value="DWD12" />
+                    <xs:enumeration value="DWD13" />
+                    <xs:enumeration value="DWD14" />
+                    <xs:enumeration value="DWD15" />
+                    <xs:enumeration value="DWD16" />
+                    <xs:enumeration value="DWD17" />
+                    <xs:enumeration value="DWD18" />
+                    <xs:enumeration value="DWD19" />
+                    <xs:enumeration value="DWD20" />
+                    <xs:enumeration value="DWD21" />
+                    <xs:enumeration value="DWD22" />
+                    <xs:enumeration value="DWD23" />
+                    <xs:enumeration value="DWD24" />
+                    <xs:enumeration value="DWD25" />
+                    <xs:enumeration value="DWD26" />
+                    <xs:enumeration value="DWD27" />
+                    <xs:enumeration value="DWD28" />
+                    <xs:enumeration value="DWD29" />
+                    <xs:enumeration value="DWD30" />
+                    <xs:enumeration value="DWD31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="schemaVersionGroup">
+        <xs:attribute name="schemaVersion" default="Undefined" use="optional">
+            <xs:annotation>
+                <xs:documentation>Targeted version of schema this document has been created for. The version number must exactly match the version used by the VI Library and the XML Configuration Editor.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Undefined" />
+                    <xs:enumeration value="1.0" />
+                    <xs:enumeration value="1.1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:complexType name="CoreType">
+        <xs:annotation>
+            <xs:documentation>Represents a (potential) multichannel piece of hardware at its highest level.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="coreConfiguration" type="CoreConfigurationType" minOccurs="0" />
+            <xs:element name="channel1553" type="Channel1553Type" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="channel429" type="Channel429Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="schemaVersionGroup" />
+    </xs:complexType>
+    <xs:complexType name="CoreConfigurationType">
+        <xs:all minOccurs="0">
+            <xs:element name="sequentialLog" type="SequentialLogType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The sequential log settings for the core. This node must be present in the configuration file in order for the core to utilize the hardware’s sequential monitoring feature. Otherwise, data will not be recorded and statistics will not be gathered.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="builtInTest" type="BuiltInTestType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The built-in test setting for the core.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="pxi" type="PxiType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The PXIe settings for the core.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sysMon" type="SysMonType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The system monitor settings for the core.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timing" type="TimingType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Timing and Synchronization, IRIG, and Timer settings for the core. Timing and Synchronization settings valid only on Core 0.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="enableInterrupts" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether interrupts are enabled for the core.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SequentialLogType">
+        <xs:all>
+            <xs:element name="dioBankMasks" type="DioBankMasksType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>A collection of sequential log mask settings for DIO banks of the core.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="perChannelStreaming" default="true" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether records recorded by the sequential log are placed into separate buffers for each channel. If true, the protocol libraries (BTI1553Lib “BM” block and BTI429Lib “Rx” block) must be used to process sequential log data that is recorded separately by each channel. If false, the records are in a single buffer for the entire core and must be processed by VIs in the “Sequential Monitor” block of the BTICardLib library. The default value is true.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="useDMA" default="true" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether sequential data is buffered directly on the host computer rather than using the on-Card buffer. Using host memory (value is true) uses less host processing at the cost of a smaller buffer size (1 MB). Using on-Card memory (value is false) uses more host processing with a larger buffer size (16 MB). It is recommended to only set this property to false if perChannelStreaming is also false, since perChannelStreaming effectively adds an additional host buffer for each channel. The default value is true.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="DioBankMasksType">
+        <xs:sequence>
+            <xs:element name="dioBankMask" type="DioBankMaskType" minOccurs="1" maxOccurs="4">
+                <xs:annotation>
+                    <xs:documentation>A single of sequential log mask setting for DIO bank of the core – by defining this node, it enables  sequential monitoring on specific transitions of discrete inputs.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DioBankMaskType">
+        <xs:attribute name="bankNum" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>The bank number of DIO. For the bank number 0, the LSB of each value corresponds to DIO number 1 and the MSB corresponds to DIO number 16 – 1 for 17-32, 2 for 33-48, and 3 for 49-64 respectively.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="riseMask" default="FFFF">
+            <xs:annotation>
+                <xs:documentation>The discrete bitmask specifying up to 16 discrete input signals to monitor rising edges.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="fallMask" default="FFFF">
+            <xs:annotation>
+                <xs:documentation>The discrete bitmask specifying up to 16 discrete input signals to monitor falling edges.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="BuiltInTestType">
+        <xs:attribute name="eventLogOnECC" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether BIT (built-in test) configuration will generate an event log entry when an ECC event occurs. In this mode, if a single bit error occurs, the read value will be corrected, BITSTAT_SINGLE_BIT_ERR will be set in the BIT status register and an event log entry is generated. If a double bit error occurs, the read value can’t be corrected so the card will be stopped, BIT_STAT_DOUBLE_BIT_ERR will be set in the BIT status register, and an event log entry is generated.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnSEU" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether BIT (built-in test) configuration will generate event log entries for single event upsets (SEU) in the FPGA configuration. In this mode, if a single event upset is detected, the card will be stopped, the single event upset bit will be set in the BIT status register, and an event log entry is generated.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnProtocolError" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether BIT (built-in test) configuration will generate event log entries on CBIT (continuous built-in test) errors the 1553 protocol engine. Every 1553 word transmitted by the card will be monitored and checked for accuracy, if a protocol error is detected, the card will be stopped, the protocol error bit will be set in the BIT status register, and an event log entry is generated.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnSystemMonitor" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether BIT (built-in test) configuration will generate event log entries on System Monitor errors. Temperature sensors will be monitored and if a sensor limit is exceeded, the card will be stopped, the system monitor error bit will be set in the BIT status register, and an event log entry is generated.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="PxiType">
+        <xs:attribute name="source10MHz" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the 10MHz, 50% duty-cycle source clock is enabled on the PXIe_DSTARC line.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SysMonType">
+        <xs:all>
+            <xs:element name="temperatureSensors" type="TemperatureSensorsType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>A collection of System Monitor sensors.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="TemperatureSensorsType">
+        <xs:sequence>
+            <xs:element name="temperatureSensor" type="TemperatureSensorType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A System Monitor sensor.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TemperatureSensorType">
+        <xs:attribute name="index">
+            <xs:annotation>
+                <xs:documentation>The index that specifies the temperature sensor.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="15" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="sensorName">
+            <xs:annotation>
+                <xs:documentation>The name that specifies the temperature sensor for converting to the index if the index is not defined.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="FPGA" />
+                    <xs:enumeration value="XCVR" />
+                    <xs:enumeration value="Memory" />
+                    <xs:enumeration value="PwrSupply" />
+                    <xs:enumeration value="Processor" />
+                    <xs:enumeration value="IOModule" />
+                    <xs:enumeration value="PCB" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="highThresh" use="required">
+            <xs:annotation>
+                <xs:documentation>The high threshold of the temperature sensor in units of degrees Celsius. If the sensor value exceeds the user definable thresholds, the BIT status register will indicate a fault.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="-40.000" />
+                    <xs:maxInclusive value="99.999" />
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="lowThresh" use="required">
+            <xs:annotation>
+                <xs:documentation>The low threshold of the temperature sensor in units of degrees Celsius. If the sensor value exceeds the user definable thresholds, the BIT status register will indicate a fault.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="-40.000" />
+                    <xs:maxInclusive value="99.999" />
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TimingType">
+        <xs:attribute name="driftMax" default="425000000" type="xs:unsignedInt">
+            <xs:annotation>
+                <xs:documentation>The value of the device’s maximum drift adjustment limit. This value is the limit the device will attempt to bias the clock frequency to match an incoming source frequency. The default value is 425000000.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="delayComp" default="0" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The value of the device’s input compensation. The device will adjust the internal time by the set amount to account for flight and logic delays in the circuitry and wiring when synchronizing time to an external IRIG or PPS source. The value is in nano second and the default value is 0.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="irigControlVal" default="00000000">
+            <xs:annotation>
+                <xs:documentation>The value of outgoing IRIG control field.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="4" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="irigYears" default="2000">
+            <xs:annotation>
+                <xs:documentation>The value to set the device year which is an unsigned integer between 2000 and 2099.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="2000" />
+                    <xs:maxInclusive value="2099" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="irigType" default="B">
+            <xs:annotation>
+                <xs:documentation>The IRIG Time Code A or B. B is default.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="A" />
+                    <xs:enumeration value="B" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="jumpThreshPPT" default="425000000" type="xs:unsignedInt">
+            <xs:annotation>
+                <xs:documentation>The value of the device IRIG/PPS drift threshold. The value is in parts per trillion, and it is used to set the maximum drift adjustment a time delta can force onto the clock frequency. The default value is 425000000.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="jumpThreshNS" default="200000" type="xs:unsignedInt">
+            <xs:annotation>
+                <xs:documentation>The value of the device IRIG/PPS time threshold. The value is in nanosecond, and it is used to set the minimum offset value that will force the timer to jump to the received time.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="timerRollover" default="31536000000000000" type="xs:unsignedLong">
+            <xs:annotation>
+                <xs:documentation>The value of the device's timer rollover.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="timeSourceSelect" default="None">
+            <xs:annotation>
+                <xs:documentation>The output timing source configuration – PPS0, PPS1, PWM IRIG, AM IRIG, 10MHZ, IRIGA (100 millisecond period), IRIGB (1 second period) signal.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="None" />
+                    <xs:enumeration value="PPS0" />
+                    <xs:enumeration value="PPS1" />
+                    <xs:enumeration value="PWMIRIG0" />
+                    <xs:enumeration value="PWMIRIG1" />
+                    <xs:enumeration value="AMIRIG" />
+                    <xs:enumeration value="10MHZ" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timeSyncSelect" default="None">
+            <xs:annotation>
+                <xs:documentation>The timing sync configuration selection - PPS0, PPS1, PWM IRIG, AM IRIG, 10MHZ, IRIGA (100 millisecond period), IRIGB (1 second period) signal.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="None" />
+                    <xs:enumeration value="PPS0" />
+                    <xs:enumeration value="PPS1" />
+                    <xs:enumeration value="PWMIRIG0" />
+                    <xs:enumeration value="PWMIRIG1" />
+                    <xs:enumeration value="AMIRIG" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timeEnableUserInputThresh" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the user input timing threshold setting is enabled.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="timeInputThreshVal" default="0000">
+            <xs:annotation>
+                <xs:documentation>The user timing input threshold value. Valid only if timeEnableUserInputThresh is true.</xs:documentation>
+                <xs:documentation>If timeSyncSelect = AMIRIG, this sets the amplitude-modulated IRIG low threshold.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="driftSyncSelect" default="None">
+            <xs:annotation>
+                <xs:documentation>The drift sync configuration selection - PPS0, PPS1, PWM IRIG, AM IRIG, 10MHZ, IRIGA (100 millisecond perid), IRIGB (1 second period) signal.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="None" />
+                    <xs:enumeration value="PPS0" />
+                    <xs:enumeration value="PPS1" />
+                    <xs:enumeration value="PWMIRIG0" />
+                    <xs:enumeration value="PWMIRIG1" />
+                    <xs:enumeration value="AMIRIG" />
+                    <xs:enumeration value="10MHZ" />
+                    <xs:enumeration value="HOST" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="driftEnableUserInputThresh" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the user input drift threshold setting is enabled.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="driftInputThreshVal" default="0000">
+            <xs:annotation>
+                <xs:documentation>The user drift input threshold value. Valid only if driftEnableUserInputThresh is true.</xs:documentation>
+                <xs:documentation>If driftSyncSelect = AMIRIG, this sets the amplitude-modulated IRIG low threshold</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="resolution" default="1NS">
+            <xs:annotation>
+                <xs:documentation>The resolution for time-tag timer on the device – current, 1 us, 16 us, 1024 us, or 1 ns. This attribute has no effect on the OB2 PXIe product and is fixed at 1 ns resolution.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="1NS" />
+                    <xs:enumeration value="1US" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timerValue" default="0" type="xs:unsignedLong">
+            <xs:annotation>
+                <xs:documentation>The timer value for setting device timer. The valid range is from 0 to 2^64-1.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Channel1553Type">
+        <xs:annotation>
+            <xs:documentation>Represents a 1553 channel at its highest level.</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="simulation" type="Simulation1553Type" />
+            <xs:element name="playback" type="Playback1553Type" />
+        </xs:choice>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="schemaVersionGroup" />
+        <xs:attributeGroup ref="channelGroup" />
+        <xs:attribute name="amplitudeAdjustEnable" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the parametric amplitude control is enabled.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="amplitudePercent" default="50.00">
+            <xs:annotation>
+                <xs:documentation>The percentage of the amplitude control value used for configuration. 50% is used as default while 100% is twice the default amplitude. Actual voltage varies depending on bus loading and driver strength.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0.00" />
+                    <xs:maxInclusive value="100.00" />
+                    <xs:fractionDigits value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="termination" default="Off">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the direct coupled termination resistance is set to off (Bus A and B) or on (Bus A, B, or both A and B)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Off" />
+                    <xs:enumeration value="OnA" />
+                    <xs:enumeration value="OnB" />
+                    <xs:enumeration value="On" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="modeCodes" default="MC01">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the mode code is enabled (MC0, MC1, or MC01) or disabled (None). The sub address (SA) 0b00000 will be selected for the mode code if it is MC0, SA 0b11111 will be selected for the mode code if it is MC1, or random SA 0b00000 or 0b11111 will be selected for the mode code if it is MC01.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="MC01" />
+                    <xs:enumeration value="MC1" />
+                    <xs:enumeration value="MC0" />
+                    <xs:enumeration value="None" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="broadcast" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the broadcast is enabled. When broadcast is enabled, RT31 is treated as the broadcast RT and holds all broadcast message data.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Simulation1553Type">
+        <xs:annotation>
+            <xs:documentation>Encapsulates nodes that describe the simulation of MIL-STD-1553-compliant hardware on a bus.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="busMonitor" type="BusMonitor1553Type" minOccurs="0" />
+            <xs:element name="busController" type="BusController1553Type" minOccurs="0">
+                <xs:key name="scheduleID1553Key">
+                    <xs:selector xpath="bti:majorFrames/bti:majorFrame" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="scheduleID1553KeyRef" refer="scheduleID1553Key">
+                    <xs:selector xpath="." />
+                    <xs:field xpath="@scheduleIDRef" />
+                </xs:keyref>
+                <xs:key name="minorFrame1553Key">
+                    <xs:selector xpath="bti:minorFrames/bti:minorFrame" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="minorFrame1553KeyRef" refer="minorFrame1553Key">
+                    <xs:selector xpath="bti:majorFrames/bti:majorFrame/bti:minorFrameRef" />
+                    <xs:field xpath="@minorFrameIDRef" />
+                </xs:keyref>
+                <xs:key name="messageID1553Key">
+                    <xs:selector xpath="bti:messages/bti:messageCommand" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="messageID1553KeyRef" refer="messageID1553Key">
+                    <xs:selector xpath="bti:minorFrames/bti:minorFrame/bti:commandMessageRef" />
+                    <xs:field xpath="@messageIDRef" />
+                </xs:keyref>
+                <xs:key name="BCMessageBufferID1553Key">
+                    <xs:selector xpath="bti:messageBuffers/bti:messageBuffer" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="BCMessageBufferID1553KeyRef" refer="BCMessageBufferID1553Key">
+                    <xs:selector xpath="bti:messages/bti:messageCommand" />
+                    <xs:field xpath="@messageBufferIDRef" />
+                </xs:keyref>
+            </xs:element>
+            <xs:element name="remoteTerminals" type="RemoteTerminals1553Type" minOccurs="0" />
+            <xs:element name="errorInjection" type="ErrorInjection1553Type" minOccurs="0">
+                <xs:key name="preloadedErrorID1553Key">
+                    <xs:selector xpath="bti:definedErrors/bti:definedError" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="preloadedErrorID1553KeyRef" refer="preloadedErrorID1553Key">
+                    <xs:selector xpath="." />
+                    <xs:field xpath="@preloadedErrorIDRef" />
+                </xs:keyref>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Playback1553Type" />
+    <xs:complexType name="BusMonitor1553Type">
+        <xs:annotation>
+            <xs:documentation>Describes how a virtual bus monitor should be simulated by the hardware on the bus.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="rtFilters" type="RTFilters1553Type" minOccurs="0" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="schemaVersionGroup" />
+        <xs:attribute name="statistics" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the statistic and error monitoring process (message count, error count, and error types) is enabled.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="RTFilters1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of rtFilter elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="rtFilter" type="RTFilter1553Type" minOccurs="0" maxOccurs="32" />
+        </xs:sequence>
+        <xs:attribute name="invert" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the remote terminal address filters for bus monitoring are inverted. Inverted filtering is subtractive rather than additive which is the default. If only a few RTs/SAs need to be filtered out, enabling invert allows the filtering selections to be much simpler.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="RTFilter1553Type">
+        <xs:annotation>
+            <xs:documentation>Describes one of the 32 possible filters to be used to monitor a remote terminal as desired.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="rtAddress">
+            <xs:annotation>
+                <xs:documentation>The remote terminal address that is specified to monitor on the bus. If filtering is inverted, this is instead an RT that is specified to not monitor (in combination with bits set in the SA and MC masks below it)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="rxSAMask" default="FFFFFFFF">
+            <xs:annotation>
+                <xs:documentation>The bitmask of receive sub-addresses that is specified to monitor for the remote terminal address defined by rtAddress. In each bitmask, the least significant bit corresponds to sub-address or mode code number zero and the most significant bit corresponds to sub-address or mode code number 31. If filtering is inverted these are the SAs to not monitor.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="4" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="txSAMask" default="FFFFFFFF">
+            <xs:annotation>
+                <xs:documentation>The bitmask of transmit sub-addresses that is specified to monitor for the remote terminal address defined by rtAddress. If filtering is inverted these are the SAs to not monitor.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="4" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="rxMCMask" default="FFFFFFFF">
+            <xs:annotation>
+                <xs:documentation>The bitmask of receive mode codes that is specified to monitor for the remote terminal address defined by rtAddress. If filtering is inverted these are the MCs to not monitor.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="4" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="txMCMask" default="FFFFFFFF">
+            <xs:annotation>
+                <xs:documentation>The bitmask of transmit mode codes that is specified to monitor for the remote terminal address defined by rtAddress. If filtering is inverted these are the MCs to not monitor.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="4" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="BusController1553Type">
+        <xs:annotation>
+            <xs:documentation>Describes how a virtual bus controller should be simulated by the hardware on the bus.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageBuffers" type="MessageBuffers1553Type" minOccurs="0" />
+            <xs:element name="messages" type="Messages1553Type" minOccurs="0" />
+            <xs:element name="minorFrames" type="MinorFrames1553Type" minOccurs="0" />
+            <xs:element name="majorFrames" type="MajorFrames1553Type" minOccurs="0" />
+            <xs:element name="acyclicFrames" type="AcyclicFrames1553Type" minOccurs="0" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+            <xs:element name="triggerInputs" type="TriggerInputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="schemaVersionGroup" />
+        <xs:attribute name="scheduleMaxEntries" default="512">
+            <xs:annotation>
+                <xs:documentation>The maximum number of schedule entries allocated for the ARINC 429 schedule. The default number is 512. For larger schedules, this number should be increased.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="8187" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="scheduleIDRef" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The ID reference to the MIL-STD-1553 schedule major frame. The scheduleIDRef should match with one of major frame IDs defined within major frames in order to schedule frames for transmit and receive.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="triggerMode" default="None">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines no trigger, trigger external, or trigger external start.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="None" />
+                    <xs:enumeration value="External" />
+                    <xs:enumeration value="Start" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnHalt" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log on halt is generated for the bus controller (BC).</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnPause" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log on pause is generated for the bus controller (BC).</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="stepMode" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the single stepping is enabled for BC scheduling.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="syncMode" default="Selective">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the sync out is selected at message level (Selective) or for all messages (All).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Selective" />
+                    <xs:enumeration value="All" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="defaultGap" default="8.0">
+            <xs:annotation>
+                <xs:documentation>The default gap time between scheduled messages. This can be replaced by a unique gap time value defined in the schedule gap of minor frames. The valid gap times are between 4.0 and 819.1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="4.0" />
+                    <xs:maxInclusive value="819.1" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timeout" default="19.0">
+            <xs:annotation>
+                <xs:documentation>The timeout value in microseconds that sets the maximum time the BC will wait before declaring that an RT is non-responsive.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="3.0" />
+                    <xs:maxInclusive value="102.3" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MessageBuffers1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of messageBuffer elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageBuffer" type="MessageBuffer1553Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MessageBuffer1553Type">
+        <xs:annotation>
+            <xs:documentation>Defines a buffer of data that can be referenced for transmission or reception.</xs:documentation>
+        </xs:annotation>
+		<xs:sequence>
+        <xs:element name="messageData" type="MessageData1553Type" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attribute name="bufferMaxEntries" default="1">
+            <xs:annotation>
+                <xs:documentation>The maximum number of message data entries allocated in the buffer. Define 1 here for current-value only messages, or greater than 1 for FIFO or Circular buffers.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:maxInclusive value="1023" />
+                    <xs:minInclusive value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="bufferType" default="FIFO">
+            <xs:annotation>
+                <xs:documentation>The list buffer type of message data – FIFO or Circular. This option is configured only if the bufferMaxEntries is greater than 1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="FIFO" />
+                    <xs:enumeration value="Circular" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnEmptyOrFull" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether an event log is generated when the buffer is empty or full. If it is a transmit buffer, it is generated on empty. If is a receive buffer, it is generated on full.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnHalf" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether an event log is generated when the middle or last entry of the buffer is processed.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MessageData1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of messageDataWord elements, which specify the actual data in the message buffer using 16-bit raw hexadecimal data word representations. This is used for transmit buffers.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageDataWord" minOccurs="1" maxOccurs="40">
+                <xs:annotation>
+                    <xs:documentation>16-bit raw data word represented in hexadecimal. The maximum number of data words to expect in one message command is 32.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="4" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Messages1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of messageCommand elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageCommand" type="Message1553Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Message1553Type">
+        <xs:annotation>
+            <xs:documentation>Defines a particular type of message that can be either added to a schedule or sent asynchronously, and associates it with a messageBuffer of data.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="messageBCRT" type="MessageBCRT1553Type" />
+                <xs:element name="messageRTBC" type="MessageRTBC1553Type" />
+                <xs:element name="messageRTRT" type="MessageRTRT1553Type" />
+                <xs:element name="messageMC" type="MessageMC1553Type" />
+            </xs:choice>
+            <xs:element name="retryConditions" type="Conditions1553Type" minOccurs="0" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+            <xs:element name="triggerInputs" type="TriggerInputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="message1553Group" />
+        <xs:attribute name="bus" default="A">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines which bus the message will be transmitted on (Bus A or B). Bus A is default.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="A" />
+                    <xs:enumeration value="B" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="retryCount" use="required">
+            <xs:annotation>
+                <xs:documentation>The number of times the bus controller attempts to retransmit the message based on retry conditions.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="255" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Conditions1553Type">
+        <xs:annotation>
+            <xs:documentation>A container for condition elements, which specify what situations dictate a resending of the message or creating an event log depending on the associated element.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="condition" minOccurs="1" maxOccurs="32">
+                <xs:annotation>
+                    <xs:documentation>The enumeration defines the retry conditions, the BC retransmits the message up to the number of retries. Or The enumeration defines the event log conditions. A conditional log command block causes the core generate an event log list entry if condition is evaluated as TRUE.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ALWAYS" />
+                        <xs:enumeration value="FAIL" />
+                        <xs:enumeration value="SRQ" />
+                        <xs:enumeration value="INS" />
+                        <xs:enumeration value="SSF" />
+                        <xs:enumeration value="TF" />
+                        <xs:enumeration value="BUSY" />
+                        <xs:enumeration value="ME" />
+                        <xs:enumeration value="RESPERR" />
+                        <xs:enumeration value="NORESP" />
+                        <xs:enumeration value="ALTBUS" />
+                        <xs:enumeration value="DIO1ACT" />
+                        <xs:enumeration value="DIO1NACT" />
+                        <xs:enumeration value="DIO2ACT" />
+                        <xs:enumeration value="DIO2NACT" />
+                        <xs:enumeration value="DIO3ACT" />
+                        <xs:enumeration value="DIO3NACT" />
+                        <xs:enumeration value="DIO4ACT" />
+                        <xs:enumeration value="DIO4NACT" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MessageBCRT1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies the necessary parameters for a bus controller to remote terminal message.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="commandWordOne1553Group" />
+    </xs:complexType>
+    <xs:complexType name="MessageRTBC1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies the necessary parameters for a remote terminal to bus controller message.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="commandWordOne1553Group" />
+    </xs:complexType>
+    <xs:complexType name="MessageRTRT1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies the necessary parameters for a remote terminal to remote terminal message.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="commandWordOne1553Group" />
+        <xs:attributeGroup ref="commandWordTwo1553Group" />
+    </xs:complexType>
+    <xs:complexType name="MessageMC1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies the necessary parameters to put a mode code message on the bus.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="taVal1">
+            <xs:annotation>
+                <xs:documentation>The remote terminal address (0 - 31) represented in 5 bits in the command word.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="saVal1">
+            <xs:annotation>
+                <xs:documentation>The sub address (location) of data (0 - 31) represented in 5 bits in the command word.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:enumeration value="0" />
+                    <xs:enumeration value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="modeCodeNumber">
+            <xs:annotation>
+                <xs:documentation>The mode code number (0 - 31) represented in the last 5 bits in the command word.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="direction">
+            <xs:annotation>
+                <xs:documentation>The direction of mode code command - receive or transmit.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Rx" />
+                    <xs:enumeration value="Tx" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MinorFrames1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of minorFrame elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="minorFrame" type="MinorFrame1553Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MinorFrame1553Type">
+        <xs:annotation>
+            <xs:documentation>A schedule of commands and messages that can be referenced in a majorFrame.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element name="commandMessageRef" type="SchedMessageRef1553Type" />
+                <xs:element name="commandGap" type="SchedGap1553Type" />
+                <xs:element name="commandPulse" type="SchedPulseType" />
+                <xs:element name="commandHalt" type="SchedHaltType" />
+                <xs:element name="commandLog" type="SchedLog1553Type" />
+                <xs:element name="commandPause" type="SchedPauseType" />
+                <xs:element name="commandRestart" type="SchedRestartType" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attribute name="frameTime" use="required">
+            <xs:annotation>
+                <xs:documentation>The length of frame in microseconds. The next minor frame will not begin until this time has elapsed, though acyclic frames can begin at any time.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:maxInclusive value="1310700" />
+                    <xs:minInclusive value="20" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="AcyclicFrame1553Type">
+        <xs:annotation>
+            <xs:documentation>A schedule of commands and messages that can be transmitted on-demand during a major frame schedule of minor frames. If an acyclic frame is requested by the user program, it will be transmitted at the end of the current minor frame.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element name="commandMessageRef" type="SchedMessageRef1553Type" />
+                <xs:element name="commandGap" type="SchedGap1553Type" />
+                <xs:element name="commandPulse" type="SchedPulseType" />
+                <xs:element name="commandHalt" type="SchedHaltType" />
+                <xs:element name="commandLog" type="SchedLog1553Type" />
+                <xs:element name="commandPause" type="SchedPauseType" />
+                <xs:element name="commandRestart" type="SchedRestartType" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+    </xs:complexType>
+    <xs:complexType name="SchedMessageRef1553Type">
+        <xs:annotation>
+            <xs:documentation>References a message and specifies how its transmission should be handled particular to the minor frame.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="messageIDRef" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>The ID reference to a specific message. This ID should match with one of the message IDs defined under the "messages" in order to schedule the message.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="singleShot" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the single shot bit is set for the schedule. When set to TRUE, the single shot bit instructs the BC schedule to process the specified opcode one time, and then to set the skip bit after processing is complete. The single-shot bit is FALSE (disabled) by default.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="skip" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the skip bit is set for the schedule. When set to TRUE, the skip bit instructs the BC schedule to skip over processing the specific opcode. The skip bit is FALSE (disabled) by default.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SchedGap1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a gap to wait before execution of the next command.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="gapTime" use="required">
+            <xs:annotation>
+                <xs:documentation>The gap time between scheduled messages. Valid gap time is between 4.0 and 819.1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="4.0" />
+                    <xs:maxInclusive value="16382.0" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SchedLog1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a command create an event log entry that its execution has occurred.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="eventLogConditions" type="Conditions1553Type" />
+        </xs:sequence>
+        <xs:attribute name="tag" type="xs:unsignedShort" use="required">
+            <xs:annotation>
+                <xs:documentation>The user specified tag value that is used as the information value for the event log.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MajorFrames1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of majorFrame elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="majorFrame" type="MajorFrame1553Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MajorFrame1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a schedule that can be referenced by the channel for execution.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="minorFrameRef" type="MinorFrameRef1553Type" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attribute name="loopCount">
+            <xs:annotation>
+                <xs:documentation>The maximum loop count for the BC schedule. When the loop count &gt; 0 (enabled), the BC schedule will automatically stop when it runs through the schedule loopCount times. When 0, the loopCount limit is not used and the schedule may run indefinitely.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="65535" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MinorFrameRef1553Type">
+        <xs:annotation>
+            <xs:documentation>A reference to a minor frame and thus the set of commands that it contains for execution.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="minorFrameIDRef" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>The ID reference to a specific minor frame. This ID should match with of the minor frame IDs defined under the minor frames in order to schedule the frame.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="AcyclicFrames1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of acyclicFrame elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="acyclicFrame" type="AcyclicFrame1553Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RemoteTerminals1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of remoteTerminal elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="remoteTerminal" type="RemoteTerminal1553Type" minOccurs="0" maxOccurs="32">
+                <xs:key name="RTMessageBufferID1553Key">
+                    <xs:selector xpath="bti:messageBuffers/bti:messageBuffer" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="RTMessageBufferID1553KeyRef" refer="RTMessageBufferID1553Key">
+                    <xs:selector xpath="bti:subAddress" />
+                    <xs:field xpath="@messageBufferIDRef" />
+                </xs:keyref>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="schemaVersionGroup" />
+    </xs:complexType>
+    <xs:complexType name="RemoteTerminal1553Type">
+        <xs:annotation>
+            <xs:documentation>Allows for definition of the 32 remote terminals available on the hardware.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageBuffers" type="MessageBuffers1553Type" minOccurs="0" />
+            <xs:element name="subAddress" type="SubAddress1553Type" minOccurs="0" maxOccurs="64" />
+            <xs:element name="modeCode" type="ModeCode1553Type" minOccurs="0" maxOccurs="64" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="schemaVersionGroup" />
+        <xs:attribute name="rtAddress" use="required">
+            <xs:annotation>
+                <xs:documentation>The remote terminal address (0 – 31)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="rtMode" default="Simulate">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the RT is enabled for simulation,r monitor, or disabled. A simulated RT will respond to commands it receives in the manner it is configured, whereas a monitored RT will simply hold the data it sees on the bus and not respond. Monitor mode is useful for “shadowing” external RTs.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Simulate" />
+                    <xs:enumeration value="Monitor" />
+                    <xs:enumeration value="Disable" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="initialSwd">
+            <xs:annotation>
+                <xs:documentation>The initial status word used by the simulated RTs.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:hexBinary">
+                    <xs:length value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="noBuild" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the auto building is enabled or disabled. An RT with noBuild set to “true” will not create any of the subaddresses or modecodes automatically - they must be defined specifically in the configuration file. noBuild set to “false” (default) creates all possible subaddresses and modecodes under the RT. Only created subaddresses and modecodes will can message data so uncreated ones will cause the RT to respond to messages to these addresses as illegal commands.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="autoBusy" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the auto busy is enabled or disabled.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="dynamicBC" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the RT responds to dynamic BC mode code.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="clearSwdImmediate" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The Boolean flag defines whether the status word bits are cleared immediately.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="busEnable" default="AB">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines which bus is enabled. AB – both bus A and B are enabled, A – bus A is enabled, B – bus B is enabled, None – neither bus A or B is enabled. An RT will not respond on a bus that is not enabled.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="A" />
+                    <xs:enumeration value="B" />
+                    <xs:enumeration value="AB" />
+                    <xs:enumeration value="None" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="dataWipe" default="Zeroes">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines how the data is initialized. Zeroes – the data is initialized to 0, 123 – the data is initialized with incrementing values, CWD – the data is initialized with command word, or None – data initialization is disabled.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Zeroes" />
+                    <xs:enumeration value="123" />
+                    <xs:enumeration value="CWD" />
+                    <xs:enumeration value="None" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="syncMode" default="Selective">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the sync out is selected at message level (Selective) or for all messages (All).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Selective" />
+                    <xs:enumeration value="All" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="responseMode" default="1553B">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines the response mode – MIL-STD-1553A or MIL-STD-1553B standard.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="1553A" />
+                    <xs:enumeration value="1553B" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="responseTime" default="9.0">
+            <xs:annotation>
+                <xs:documentation>The response time for the specified Remote Terminal on the channel.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="3.7" />
+                    <xs:maxInclusive value="819.1" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SubAddress1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a subaddress on the remote terminal.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="message1553Group" />
+        <xs:attribute name="subAddress" use="required">
+            <xs:annotation>
+                <xs:documentation>The sub address (location) of data.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="direction" use="required">
+            <xs:annotation>
+                <xs:documentation>The message direction – Tx (RT to BC) or Rx (BC to RT)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Tx" />
+                    <xs:enumeration value="Rx" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="wrap" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the data wrap is enabled – The receive SA data will be automatically wrapped to corresponding transmit SA data.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ModeCode1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a mode code on the remote terminal.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="message1553Group" />
+        <xs:attribute name="modeCodeNumber" use="required">
+            <xs:annotation>
+                <xs:documentation>The mode code number (0 – 31) represented in the last 5 bits in the command word.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:byte">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="31" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="direction" use="required">
+            <xs:annotation>
+                <xs:documentation>The message direction – Tx (RT to BC) or Rx (BC to RT)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Tx" />
+                    <xs:enumeration value="Rx" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="wrap" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the data wrap is enabled – The receive SA data will be automatically wrapped to corresponding transmit SA data (RT only).</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ErrorInjection1553Type">
+        <xs:annotation>
+            <xs:documentation>Allows for the definition of errors that are to be injected on the bus for testing purposes.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="definedErrors" type="DefinedErrors1553Type" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="state" default="Off">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the error generation is disabled (Off), enabled (On), enabled once (Once), or enabled externally (External).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Off" />
+                    <xs:enumeration value="On" />
+                    <xs:enumeration value="Once" />
+                    <xs:enumeration value="External" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="errorMessages" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the errors are generated on tagged messages (Tagged) or on any messages (Any).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Tagged" />
+                    <xs:enumeration value="Any" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="preloadedErrorIDRef" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The ID reference to the defined error. This ID should match with one of the defined errors.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="DefinedErrors1553Type">
+        <xs:annotation>
+            <xs:documentation>A collection of definedError elements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="definedError" type="DefinedError1553Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DefinedError1553Type">
+        <xs:annotation>
+            <xs:documentation>Defines an error that is available for injection.</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="gapError" type="GapError1553Type" />
+            <xs:element name="wordCountError" type="WordCountError1553Type" />
+            <xs:element name="bitCountError" type="BitCountError1553Type" />
+            <xs:element name="manchesterError" type="ManchesterError1553Type" />
+            <xs:element name="syncError" type="SyncError1553Type" />
+            <xs:element name="parityError" type="ParityError1553Type" />
+            <xs:element name="zeroCrossingError" type="ZeroCrossingError1553Type" />
+        </xs:choice>
+        <xs:attributeGroup ref="nameIDGroup" />
+    </xs:complexType>
+    <xs:complexType name="GapError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a gap error.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="wordPos1553Group" />
+        <xs:attribute name="gapLength" use="required">
+            <xs:annotation>
+                <xs:documentation>The time for the gap errors.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0.0" />
+                    <xs:maxInclusive value="818.1" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="WordCountError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a word count error.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that an absolute word count error or a relative count error will be generated.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Relative" />
+                    <xs:enumeration value="Absolute" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="count" use="required">
+            <xs:annotation>
+                <xs:documentation>The word count error. For the absolute word count errors, count may be from 0 to 40. For relative word count errors, the sum of count and the word count field in the command word must be less than or equal to 40.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="40" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="BitCountError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a bit count error.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="wordPos1553Group" />
+        <xs:attribute name="value" use="required">
+            <xs:annotation>
+                <xs:documentation>The value of extra bits in the bit count error. The least significant bits of value determine the values of extra bits in a bit count error.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[0-1]{1,3}" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="count" use="required">
+            <xs:annotation>
+                <xs:documentation>The number of extra bits.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="-2" />
+                    <xs:maxInclusive value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ManchesterError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a Manchester error.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="wordPos1553Group" />
+        <xs:attribute name="half" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the Manchester error is generated on the first half or second half of bit.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="First" />
+                    <xs:enumeration value="Second" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="bitPos" use="required">
+            <xs:annotation>
+                <xs:documentation>The bit containing a Manchester error. It may range from 0 to 19.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="19" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SyncError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a sync error.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="wordPos1553Group" />
+    </xs:complexType>
+    <xs:complexType name="ParityError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a parity error.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="wordPos1553Group" />
+    </xs:complexType>
+    <xs:complexType name="ZeroCrossingError1553Type">
+        <xs:annotation>
+            <xs:documentation>Specifies a zero-crossing error.</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="wordPos1553Group" />
+        <xs:attribute name="type" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the zero crossing error will be generated on leading zero crossing or mid-bit zero crossing.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Leading" />
+                    <xs:enumeration value="Mid-bit" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="nanoSecShift" use="required">
+            <xs:annotation>
+                <xs:documentation>The time amount in nanoseconds that the edge is shifted. The positive value delays the edge and a negative value advances it.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="-200" />
+                    <xs:maxInclusive value="200" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="bitPos" use="required">
+            <xs:annotation>
+                <xs:documentation>The bit containing zero crossing error. It may range from 0 to 19.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="19" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Channel429Type">
+        <xs:annotation>
+            <xs:documentation>An ARINC 429 channel.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="txChannel" type="TxChannel429Type">
+                    <xs:key name="scheduleID429Key">
+                        <xs:selector xpath="bti:schedules/bti:schedule" />
+                        <xs:field xpath="@ID" />
+                    </xs:key>
+                    <xs:keyref name="scheduleID429KeyRef" refer="scheduleID429Key">
+                        <xs:selector xpath="." />
+                        <xs:field xpath="@scheduleIDRef" />
+                    </xs:keyref>
+                    <xs:key name="messageID429Key">
+                        <xs:selector xpath="bti:messages/bti:message" />
+                        <xs:field xpath="@ID" />
+                    </xs:key>
+                    <xs:keyref name="messageID429KeyRef" refer="messageID429Key">
+                        <xs:selector xpath="bti:schedules/bti:schedule/bti:schedMessageRef" />
+                        <xs:field xpath="@messageIDRef" />
+                    </xs:keyref>
+                </xs:element>
+                <xs:element name="rxChannel" type="RxChannel429Type" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attributeGroup ref="schemaVersionGroup" />
+        <xs:attributeGroup ref="channelGroup" />
+        <xs:attribute name="parity" default="Odd">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the parity bit of the ARINC 429 message is set as Odd, Even, or Data.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Odd" />
+                    <xs:enumeration value="Even" />
+                    <xs:enumeration value="Data" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="enable" default="true" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>Future use.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="monitorMode" default="Selective">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines that the sequential record is enabled at message level (Selective) or entire channel (All).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Selective" />
+                    <xs:enumeration value="All" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timeOrHitCount" default="Time">
+            <xs:annotation>
+                <xs:documentation>If hitcount, then the channel will record hitcount on messages by default. If time, then the channel will record timetag, min, and max time on messages by default. Setting to None means this setting is fully controlled at the message level. This can be overridden by the message setting.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Time" />
+                    <xs:enumeration value="HitCount" />
+                    <xs:enumeration value="None" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="statistics" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the statistic and error monitoring process (message count, error count, and error type) is enabled or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="selfTestBus" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>Enables the internal transmit/receive wraparound for the channel. 
+Only one transmit channel should enable this setting at a time. 
+One or more receive channels may also enable this setting to allow the channel to receive the transmit channel's transmissions.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TxChannel429Type">
+        <xs:annotation>
+            <xs:documentation>ARINC 429 transmit channel settings.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="asyncMessageList" type="AsyncMessageList429Type" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Only FIFOs may be used for Async List buffer.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="messages" type="Messages429Type" minOccurs="0" />
+            <xs:element name="schedules" type="Schedules429Type" minOccurs="0" />
+            <xs:element name="triggerInputs" type="TriggerInputsType" minOccurs="0" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="scheduleIDRef" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The ID reference to the ARINC 429 schedule. If the schedule mode is “Rate”, this ID reference is not used. If the schedule mode is “Explicit”, the scheduleIDRef should match with one of schedule IDs defined in within the schedules element in order to schedule messages for transmit.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="speedKHz" default="100.0">
+            <xs:annotation>
+                <xs:documentation>The transmit parametric frequency rate in KHz on specified channel - If it is less than 20 KHz, the low speed channel configuration is selected; otherwise, the high speed channel configuration is selected. Default speed when this attribute is not set is 12.5 KHz for low speed and 100.0 KHz for high speed.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="2.4" />
+                    <xs:maxInclusive value="200.0" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="parametricMode" default="Off">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the parametric waveform control is enabled or not. This allows the use of the positiveLeg, negativeLeg, highVolt, lowVolt, nullVolt, cmBiasVolt, highRiseTime, and lowRiseTime attributes and is only available on Advanced 429 channels (45x models)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Wave" />
+                    <xs:enumeration value="Off" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnHalt" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log on schedule halt is generated or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnPause" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log on schedule pause is generated or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="paused" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>Future use.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="scheduleMaxEntries" default="512">
+            <xs:annotation>
+                <xs:documentation>The maximum number of schedule entries allocated for the ARINC 429 schedule. The default number is 512. For larger schedules, this number should be increased.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="8187" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="scheduleMode" default="Explicit">
+            <xs:annotation>
+                <xs:documentation>The schedule mode – Explicit or Rate. Explicit requires one or more schedules under the “schedule” element. Rate will use the “minRate” and “maxRate” attributes of messages to build the schedule at runtime.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Rate" />
+                    <xs:enumeration value="Explicit" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="scheduleBuildMethod" default="Both">
+            <xs:annotation>
+                <xs:documentation>The schedule build mode method – Normal, Quick, or Both. If the Both method is selected, the Quick method is chosen first, if failed, then the Normal method is chosen, finally the legacy method. Valid only if scheduleMode is "Rate".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Normal" />
+                    <xs:enumeration value="Quick" />
+                    <xs:enumeration value="Both" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="scheduleBuildUnit" default="Millisecond">
+            <xs:annotation>
+                <xs:documentation>The schedule build unit defines the scheduling periods in milliseconds or microseconds. Valid only if scheduleMode is "Rate".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Millisecond" />
+                    <xs:enumeration value="Microsecond" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="positiveLeg" default="Signal">
+            <xs:annotation>
+                <xs:documentation>The output state of the transmitter's positive leg. Signal – connect the leg to normal transmit signal, Open – leave the leg open, and Ground – short the leg to ground. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Signal" />
+                    <xs:enumeration value="Open" />
+                    <xs:enumeration value="Ground" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="negativeLeg" default="Signal">
+            <xs:annotation>
+                <xs:documentation>The output state of the transmitter's negative leg. Signal – connect the leg to normal transmit signal, Open – leave the leg open, and Ground – short the leg to ground. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Signal" />
+                    <xs:enumeration value="Open" />
+                    <xs:enumeration value="Ground" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="highVolt" default="10.000">
+            <xs:annotation>
+                <xs:documentation>The differential voltage of the first half of all one-bits for the parametric waveform configuration in volts. 6G devices with parametric waveform capability provide control over transmit amplitude, offset voltage, null voltage, common-mode bias, rise time, and fall time. Valid only if parametricMode is "Wave."</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="lowVolt" default="-10.000">
+            <xs:annotation>
+                <xs:documentation>The differential voltage of the first half of all zero-bits for the parametric waveform configuration in volts. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="nullVolt" default="0.000">
+            <xs:annotation>
+                <xs:documentation>The differential voltage of the second half of all bits for the parametric waveform configuration in volts. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="cmBiasVolt" default="0.000">
+            <xs:annotation>
+                <xs:documentation>The single-ended common mode bias of the entire signal for the parametric waveform configuration in volts. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="highRiseTime" default="1.800">
+            <xs:annotation>
+                <xs:documentation>The rise and fall time of all one-bits for the parametric waveform configuration in milliseconds. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="lowRiseTime" default="1.800">
+            <xs:annotation>
+                <xs:documentation>The rise and fall time of all zero-bits for the parametric waveform configuration in milliseconds. Valid only if parametricMode is "Wave".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:fractionDigits value="3" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="AsyncMessageList429Type">
+        <xs:annotation>
+            <xs:documentation>An asynchronous list buffer used to transmit dynamically defined (defined at runtime) data or predefined (defined in the configuration file) data. This data is placed into a FIFO transmit buffer and transmitted as long as data remains in the buffer during gaps in the transmit schedule.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageBuffers" type="MessageBuffers429Type" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="asyncBufferMaxSize" default="512" type="xs:unsignedInt">
+            <xs:annotation>
+                <xs:documentation>The maximum number of items that can be held in the asynchronous list buffer FIFO. None of the message buffers defined on this node may have a bufferMaxSize exceeding this value.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="MessageBuffers429Type">
+        <xs:annotation>
+            <xs:documentation>A collection of message buffers defined for an ARINC 429 transmit message or asynchronous buffer. Multiple buffers may be defined in order to allow the data to be switched at runtime using the predefined data held here.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageBuffer" type="MessageBuffer429Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MessageBuffer429Type">
+        <xs:annotation>
+            <xs:documentation>A predefined ARINC 429 message data buffer. Contains one or more 32-bit ARINC message values. Note the labelDecimal and SDI attributes on the message may cause some bits in rawData to be ignored.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="rawData" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>4-byte raw data of the message.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:hexBinary">
+                        <xs:length value="4" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attribute name="bufferMaxEntries" default="1">
+            <xs:annotation>
+                <xs:documentation>The maximum number of 4-byte raw message data entries allocated in the buffer.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="32764" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="bufferType" default="FIFO">
+            <xs:annotation>
+                <xs:documentation>The message list buffer type – FIFO or Circular. This option is configured only if the bufferMaxEntries is greater than 1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="FIFO" />
+                    <xs:enumeration value="Circular" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnEmpty" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether an event log is generated when the buffer is empty.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Messages429Type">
+        <xs:annotation>
+            <xs:documentation>A collection of ARINC 429 transmit messages. Each message defined here can be added to a transmit schedule node (when txChannel.scheduleMode is "Explicit") or will be automatically scheduled if enabled (when txChannel.scheduleMode = "Rate").</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="message" type="Message429Type" minOccurs="0" maxOccurs="unbounded">
+                <xs:key name="messageBufferID429Key">
+                    <xs:selector xpath="bti:messages/bti:message/bti:messageBuffers/bti:messageBuffer" />
+                    <xs:field xpath="@ID" />
+                </xs:key>
+                <xs:keyref name="messageBufferID429KeyRef" refer="messageBufferID429Key">
+                    <xs:selector xpath="bti:messages/bti:message" />
+                    <xs:field xpath="@messageBufferIDRef" />
+                </xs:keyref>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Message429Type">
+        <xs:annotation>
+            <xs:documentation>A single ARINC 429 transmit message. The message can be added to a transmit schedule node (when txChannel.scheduleMode is "Explicit") or will be automatically scheduled if enabled (when txChannel.scheduleMode = "Rate").</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="messageBuffers" type="MessageBuffers429Type" minOccurs="0" />
+            <xs:element name="triggerInputs" type="TriggerInputsType" minOccurs="0" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attribute name="messageBufferIDRef" default="-1" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The ID reference to the message buffer. This ID should match with one of the message buffer IDs defined in message buffers in order to transmit the message raw data.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="enable" default="true" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>Enables message skipping on a message. No effect if bufferMaxEntries is greater than 1.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="singleShot" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the message will be transmitted only one time (When set to true, the single-shot bit instructs the schedule to process the specified opcode one time, and then the skip bit is set after processing is complete). The single-shot bit is false (disabled) by default.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="monitor" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the message will be recorded in the sequential monitor. This setting controls the monitoring of the messages if the channel.monitorMode equal to "Selective". If channel.monitorMode equal to "All", this setting is ignored.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="minRate" default="100" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The minimum message frequency in the interval of the message schedule. This is only for channel.scheduleMode equal to "Rate". Can be in either ms or us depending on Schedule mode.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="maxRate" default="200" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The maximum message frequency in the interval of the message schedule. This is only for channel.scheduleMode equal to "Rate". Can be in either ms or us depending on Schedule mode.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="dataWipe" default="Zeroes">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines what value the message data is initialized to. Zeroes – the message data is initialized to 0, 123 – the message data is initialized to 1, or None – disable the message data clear.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Zeroes" />
+                    <xs:enumeration value="123" />
+                    <xs:enumeration value="None" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLog" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log will be generated for the message or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="syncOutput" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether a sync output signal will be generated for the message or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="triggerInput" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether a trigger input signal will control the message transmission.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="parityError" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether a parity error will be generated for the message or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="labelDecimal" default="-1">
+            <xs:annotation>
+                <xs:documentation>The 1-byte label of the ARINC 429 message in decimal.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="-1" />
+                    <xs:maxInclusive value="255" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="SDI" default="Off">
+            <xs:annotation>
+                <xs:documentation>The 2-bit SDI of the ARINC 429 message defined as enumeration – Off, 00, 01, 10, or 11.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Off" />
+                    <xs:enumeration value="00" />
+                    <xs:enumeration value="01" />
+                    <xs:enumeration value="10" />
+                    <xs:enumeration value="11" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timeOrHitCount" default="Time">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the message will record the hitcount or timetag, min, and max time. If hitcount, then the message will record hitcount. If time, then the message will record timetag, min, and max time. This setting will override the channel setting for the same attribute.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Time" />
+                    <xs:enumeration value="HitCount" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="TriggerInputsType">
+        <xs:annotation>
+            <xs:documentation>A collection of trigger input definitions. Trigger inputs are AND'ed to determine if the trigger occurs. Up to three trigger lines may be selected, one each from A, B, or C.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="triggerInput" type="TriggerInputType" maxOccurs="3" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TriggerInputType">
+        <xs:annotation>
+            <xs:documentation>A trigger input definition defines the trigger line, trigger polarity, and active condition.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="line" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines the trigger input line used for controlling the transmission.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="A" />
+                    <xs:enumeration value="B" />
+                    <xs:enumeration value="C" />
+                    <xs:enumeration value="PXITRIGA" />
+                    <xs:enumeration value="PXITRIGB" />
+                    <xs:enumeration value="PXITRIGC" />
+                    <xs:enumeration value="PXISTARA" />
+                    <xs:enumeration value="PXISTARB" />
+                    <xs:enumeration value="PXISTARC" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="polarity" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines the trigger input pin polarity (high or low).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="High" />
+                    <xs:enumeration value="Low" />
+                    <xs:enumeration value="Rise" />
+                    <xs:enumeration value="Fall" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="condition" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines whether the trigger input line is active or inactive.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Active" />
+                    <xs:enumeration value="Inactive" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SyncOutputsType">
+        <xs:annotation>
+            <xs:documentation>A collection of sync output definitions. Sync output definitions will output a sync signal on message transmission. Up to seven sync lines may be selected, one for each line.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="syncOutput" type="SyncOutputType" maxOccurs="7" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SyncOutputType">
+        <xs:annotation>
+            <xs:documentation>A sync output definition defines the sync line and polarity of the sync signal.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="line" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines the sync output line used to output a sync signal on transmission or reception.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="A" />
+                    <xs:enumeration value="B" />
+                    <xs:enumeration value="C" />
+                    <xs:enumeration value="PXITRIGA" />
+                    <xs:enumeration value="PXITRIGB" />
+                    <xs:enumeration value="PXITRIGC" />
+                    <xs:enumeration value="PXISTARC" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="polarity" use="required">
+            <xs:annotation>
+                <xs:documentation>The enumeration defines the sync output pin polarity (high or low).</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="High" />
+                    <xs:enumeration value="Low" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Schedules429Type">
+        <xs:annotation>
+            <xs:documentation>A collection of predefined ARINC 429 transmit schedules.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="schedule" type="Schedule429Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Schedule429Type">
+        <xs:annotation>
+            <xs:documentation>A predefined ARINC 429 transmit schedule. May only be used if txChannel.scheduleMode is "Explicit."
+
+Each item defined under this node will be scheduled sequentially within the transmit schedule. Unless otherwise configured, the schedule will repeat back to the beginning after the last item.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element name="schedMessageRef" type="SchedMessageRef429Type" />
+                <xs:element name="schedGap" type="SchedGap429Type" />
+                <xs:element name="schedPulse" type="SchedPulseType" />
+                <xs:element name="schedHalt" type="SchedHaltType" />
+                <xs:element name="schedPause" type="SchedPauseType" />
+                <xs:element name="schedLog" type="SchedLog429Type" />
+                <xs:element name="schedRestart" type="SchedRestartType" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+    </xs:complexType>
+    <xs:complexType name="SchedMessageRef429Type">
+        <xs:annotation>
+            <xs:documentation>A reference to a defined message node, using the message ID. The referenced message will be scheduled here.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="messageIDRef" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation>The ID reference to a specific message. This ID should match with one of the message IDs defined under the “messages” node in order to transmit the message.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="gapBitTimes" default="4">
+            <xs:annotation>
+                <xs:documentation>The user-specified schedule gap. The gap will be added (in bit times) after the message is transmitted.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="1048576" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SchedGap429Type">
+        <xs:annotation>
+            <xs:documentation>A standalone gap will be scheduled here.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="gapBitTimes" default="4">
+            <xs:annotation>
+                <xs:documentation>The user-specified schedule gap. This allows gap times to be added that don't need to be associated with a message directly before it in the schedule.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="1048576" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="allowAsync" default="true" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether asynchronous messages can be transmitted during this gap or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SchedPulseType">
+        <xs:annotation>
+            <xs:documentation>A standalone discrete (DIO) pulse will be scheduled here.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="dioNum" default="1">
+            <xs:annotation>
+                <xs:documentation>The DIO number (1-64) being pulsed to the "ON" state followed by the "OFF" state when this command is encountered in the schedule</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedByte">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="64" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SchedHaltType">
+        <xs:annotation>
+            <xs:documentation>Insert a HALT opcode into the BC schedule. A HALT opcode will stop the BC schedule from running. The channel will be stopped here and may be started at runtime.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+    <xs:complexType name="SchedPauseType">
+        <xs:annotation>
+            <xs:documentation>Insert a PAUSE opcode into the BC schedule. A PAUSE opcode will pause operation of the BC schedule. The channel will be paused here and may be resumed at runtime.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+    <xs:complexType name="SchedLog429Type">
+        <xs:annotation>
+            <xs:documentation>An event log entry will conditionally be created here.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="eventLogConditions" type="Conditions429Type" />
+        </xs:sequence>
+        <xs:attribute name="tag" type="xs:unsignedShort" use="required">
+            <xs:annotation>
+                <xs:documentation>The user-specified event tag value.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Conditions429Type">
+        <xs:annotation>
+            <xs:documentation>A collection of conditions that must all occur for the event to trigger.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="condition" minOccurs="1" maxOccurs="32">
+                <xs:annotation>
+                    <xs:documentation>The enumeration defines what digital I/O condition value to test.</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ALWAYS" />
+                        <xs:enumeration value="DIO1ACT" />
+                        <xs:enumeration value="DIO1NACT" />
+                        <xs:enumeration value="DIO2ACT" />
+                        <xs:enumeration value="DIO2NACT" />
+                        <xs:enumeration value="DIO3ACT" />
+                        <xs:enumeration value="DIO3NACT" />
+                        <xs:enumeration value="DIO4ACT" />
+                        <xs:enumeration value="DIO4NACT" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SchedRestartType">
+        <xs:annotation>
+            <xs:documentation>Insert a RESTART opcode into the BC schedule. The schedule will be restarted here.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+    <xs:complexType name="RxChannel429Type">
+        <xs:annotation>
+            <xs:documentation>ARINC 429 receive channel settings.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="labels" type="Labels429Type" minOccurs="0" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="speed" default="Auto">
+            <xs:annotation>
+                <xs:documentation>The speed mode of the specified receive channel - Auto, Low, or High.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Auto" />
+                    <xs:enumeration value="Low" />
+                    <xs:enumeration value="High" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="speedKHz" default="100.0">
+            <xs:annotation>
+                <xs:documentation>The receive parametric frequency rate in KHz on the specified receive channel. Only valid when rxChannel.speed is "Low" or "High". Default speed when this attribute is not set, 12.5 KHz for low speed and 100.0 KHz for high speed.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="2.4" />
+                    <xs:maxInclusive value="200.0" />
+                    <xs:fractionDigits value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnError" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log on decoder errors is generated or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="defaultBufferMonitor" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether received messages arriving at the default label receive buffer will be recorded in the sequential monitor. This setting controls the monitoring of the messages if the channel.monitorMode equal to "Selective". If channel.monitorMode equal to "All", this setting is ignored.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="defaultBufferMaxEntries" default="1">
+            <xs:annotation>
+                <xs:documentation>The maximum number of 4-byte raw message data entries in the default label receive buffer. This is the buffer that holds received messages that have not been filtered to a specific label defined in this configuration file.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="32764" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="defaultBufferType" default="FIFO">
+            <xs:annotation>
+                <xs:documentation>The default list buffer type of received messages. Only the FIFO type is valid.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="FIFO" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="defaultBufferEventLog" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether messages received by the default label will generate the event log for the specified channel or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="defaultBufferEventLogOnFull" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether messages received by the default label will generate an event log when the buffer is full.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="autoLabelFilterMode" default="Labels">
+            <xs:annotation>
+                <xs:documentation>This attribute defines whether receive label filters are created automatically for the channel. 
+
+If "None" - label filters are not created automatically - they must be specified within the labels collection. 
+If "Labels" - label filters are all created automatically for current value. If monitoring of the label is to be changed from the channel setting or there is to be a list buffer rather than current value - a label definition must be added to the labels collection.
+If "SDI" - label+SDI filters are all created automatically for current value. If monitoring of the label is to be changed from the channel setting or there is to be a list buffer rather than current value - a label definition must be added to the labels collection.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="None" />
+                    <xs:enumeration value="Labels" />
+                    <xs:enumeration value="SDIs" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Labels429Type">
+        <xs:annotation>
+            <xs:documentation>A collection of label filters for an ARINC 429 receive channel. Items defined here will have their own buffer for the reception of data and may be configured to be recorded by the sequential monitor (or not).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="label" type="Label429Type" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Label429Type">
+        <xs:annotation>
+            <xs:documentation>A label filter for an ARINC 429 receive channel. This label filter will have its own buffer for the reception of data and may be configured to be recorded by the sequential monitor (or not).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="labelBuffer" type="LabelBuffer429Type" minOccurs="0" />
+            <xs:element name="syncOutputs" type="SyncOutputsType" minOccurs="0" />
+        </xs:sequence>
+        <xs:attributeGroup ref="nameIDGroup" />
+        <xs:attribute name="monitor" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the message will be recorded in the sequential monitor. This setting controls the monitoring of the messages if the channel.monitorMode equal to "Selective". If channel.monitorMode equal to "All", this setting is ignored.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="labelDecimal" use="required">
+            <xs:annotation>
+                <xs:documentation>The 1-byte label of the ARINC 429 message in decimal.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:int">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="255" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="SDI" default="All">
+            <xs:annotation>
+                <xs:documentation>The 2-bit SDI of the ARINC 429 message defined as enumeration – Off, 00, 01, 10, or 11. All 5 may be defined for a given label number, allowing filtering based on the SDI field.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="All" />
+                    <xs:enumeration value="00" />
+                    <xs:enumeration value="01" />
+                    <xs:enumeration value="10" />
+                    <xs:enumeration value="11" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="timeOrHitCount" default="Time">
+            <xs:annotation>
+                <xs:documentation>If hitcount, then the message will record hitcount. If time, then the message will record timetag, min, and max time. This setting will override the channel setting for the same attribute.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Time" />
+                    <xs:enumeration value="HitCount" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLog" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether the event log will be generated for the message reception or not.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="LabelBuffer429Type">
+        <xs:annotation>
+            <xs:documentation>Defines the number of items in the receive label filter buffer. Buffers with one item are considered current-value filters and do not buffer received messages in a list.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="bufferMaxEntries" default="1">
+            <xs:annotation>
+                <xs:documentation>The maximum number of 4-byte raw message data entries allocated in the received buffer. Define 1 here for current-value only messages, or greater than 1 for FIFO or circular buffers.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                    <xs:minInclusive value="1" />
+                    <xs:maxInclusive value="32764" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="bufferType" default="FIFO">
+            <xs:annotation>
+                <xs:documentation>The list buffer type of receiving messages. Only the FIFO type is valid. This option is configured only if the bufferMaxEntries is greater than 1.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="FIFO" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="eventLogOnFull" default="false" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>The boolean flag defines whether an event log is generated when the buffer is full.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:element name="core" type="CoreType" />
+    <xs:element name="channel1553" type="Channel1553Type" />
+    <xs:element name="busMonitor" type="BusMonitor1553Type" />
+    <xs:element name="busController" type="BusController1553Type" />
+    <xs:element name="remoteTerminals" type="RemoteTerminals1553Type" />
+    <xs:element name="remoteTerminal" type="RemoteTerminal1553Type" />
+    <xs:element name="channel429" type="Channel429Type" />
+</xs:schema>

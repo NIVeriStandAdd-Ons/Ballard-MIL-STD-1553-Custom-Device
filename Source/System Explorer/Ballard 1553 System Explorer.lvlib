@@ -65,7 +65,7 @@
 			<Item Name="Parse XML Ballard" Type="Folder">
 				<Item Name="Ballard_acyclicFrame.ctl" Type="VI" URL="../SubVIs/Parse XML Ballard/Ballard_acyclicFrame.ctl"/>
 				<Item Name="Ballard_BC.ctl" Type="VI" URL="../SubVIs/Parse XML Ballard/Ballard_BC.ctl"/>
-				<Item Name="Ballard_BTI_XML_Deserializer.dll" Type="Document" URL="../SubVIs/Parse XML Ballard/Ballard_BTI_XML_Deserializer.dll"/>
+				<Item Name="Ballard_BTI_XML_MIL_STD_1553_Deserializer.dll" Type="Document" URL="../SubVIs/Parse XML Ballard/Ballard_BTI_XML_MIL_STD_1553_Deserializer.dll"/>
 				<Item Name="Ballard_Channel.ctl" Type="VI" URL="../SubVIs/Parse XML Ballard/Ballard_Channel.ctl"/>
 				<Item Name="Ballard_CWD1.ctl" Type="VI" URL="../SubVIs/Parse XML Ballard/Ballard_CWD1.ctl"/>
 				<Item Name="Ballard_CWD2.ctl" Type="VI" URL="../SubVIs/Parse XML Ballard/Ballard_CWD2.ctl"/>

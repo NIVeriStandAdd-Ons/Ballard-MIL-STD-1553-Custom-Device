@@ -152,7 +152,7 @@
 				<Property Name="Destination[2].path" Type="Path">../Built/Ballard - 1553/Ballard - 1553 Configuration.llb</Property>
 				<Property Name="Destination[2].type" Type="Str">LLB</Property>
 				<Property Name="DestinationCount" Type="Int">3</Property>
-				<Property Name="Source[0].itemID" Type="Str">{0A519FAD-5FA8-402D-881D-DE68A5E8B0CC}</Property>
+				<Property Name="Source[0].itemID" Type="Str">{39DE9015-6C61-42B2-8F73-259D00909F12}</Property>
 				<Property Name="Source[0].type" Type="Str">Container</Property>
 				<Property Name="Source[1].destinationIndex" Type="Int">0</Property>
 				<Property Name="Source[1].itemID" Type="Ref">/My Computer/Custom Device Ballard - 1553.xml</Property>

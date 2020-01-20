@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>readData</RootNamespace>
-    <AssemblyName>Ballard_BTI_XML_Deserializer</AssemblyName>
+    <AssemblyName>Ballard_BTI_XML_MIL_STD_1553_Deserializer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

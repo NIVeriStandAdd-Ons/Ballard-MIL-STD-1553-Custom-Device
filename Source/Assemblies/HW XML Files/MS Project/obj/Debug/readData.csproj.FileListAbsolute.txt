@@ -9,3 +9,9 @@ D:\1553 CD\MS Project\bin\Debug\Ballard_BTI_XML_Deserializer.pdb
 D:\1553 CD\MS Project\obj\Debug\readData.csproj.CoreCompileInputs.cache
 D:\1553 CD\MS Project\obj\Debug\Ballard_BTI_XML_Deserializer.dll
 D:\1553 CD\MS Project\obj\Debug\Ballard_BTI_XML_Deserializer.pdb
+D:\Ballard-1553-Custom-Device Inline Async\Source\Assemblies\HW XML Files\MS Project\bin\Debug\Ballard_BTI_XML_MIL_STD_1553_Deserializer.dll
+D:\Ballard-1553-Custom-Device Inline Async\Source\Assemblies\HW XML Files\MS Project\bin\Debug\Ballard_BTI_XML_MIL_STD_1553_Deserializer.pdb
+D:\Ballard-1553-Custom-Device Inline Async\Source\Assemblies\HW XML Files\MS Project\obj\Debug\readData.csprojResolveAssemblyReference.cache
+D:\Ballard-1553-Custom-Device Inline Async\Source\Assemblies\HW XML Files\MS Project\obj\Debug\readData.csproj.CoreCompileInputs.cache
+D:\Ballard-1553-Custom-Device Inline Async\Source\Assemblies\HW XML Files\MS Project\obj\Debug\Ballard_BTI_XML_MIL_STD_1553_Deserializer.dll
+D:\Ballard-1553-Custom-Device Inline Async\Source\Assemblies\HW XML Files\MS Project\obj\Debug\Ballard_BTI_XML_MIL_STD_1553_Deserializer.pdb
