@@ -142,7 +142,7 @@
 				<Property Name="Bld_localDestDirType" Type="Str">relativeToCommon</Property>
 				<Property Name="Bld_postActionVIID" Type="Ref">/My Computer/Utility/Copy .LLB to NI VeriStand dir.vi</Property>
 				<Property Name="Bld_previewCacheID" Type="Str">{E0FFDDA0-4AC9-4103-A74E-E84070D84016}</Property>
-				<Property Name="Bld_version.build" Type="Int">117</Property>
+				<Property Name="Bld_version.build" Type="Int">121</Property>
 				<Property Name="Bld_version.major" Type="Int">1</Property>
 				<Property Name="Destination[0].destName" Type="Str">Destination Directory</Property>
 				<Property Name="Destination[0].path" Type="Path">../Built/Ballard - 1553</Property>
