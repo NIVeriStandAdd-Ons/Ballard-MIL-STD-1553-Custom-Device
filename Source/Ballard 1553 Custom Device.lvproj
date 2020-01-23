@@ -142,7 +142,7 @@
 				<Property Name="Bld_localDestDirType" Type="Str">relativeToCommon</Property>
 				<Property Name="Bld_postActionVIID" Type="Ref">/My Computer/Utility/Copy .LLB to NI VeriStand dir.vi</Property>
 				<Property Name="Bld_previewCacheID" Type="Str">{E0FFDDA0-4AC9-4103-A74E-E84070D84016}</Property>
-				<Property Name="Bld_version.build" Type="Int">121</Property>
+				<Property Name="Bld_version.build" Type="Int">123</Property>
 				<Property Name="Bld_version.major" Type="Int">1</Property>
 				<Property Name="Destination[0].destName" Type="Str">Destination Directory</Property>
 				<Property Name="Destination[0].path" Type="Path">../Built/Ballard - 1553</Property>
@@ -288,7 +288,6 @@ AddOutputFilter chunkFilter
 		</Item>
 		<Item Name="Ballard 1553 Shared.lvlib" Type="Library" URL="../Shared/Ballard 1553 Shared.lvlib"/>
 		<Item Name="Ballard MIL-1553 Engine.lvlib" Type="Library" URL="../RT Driver/Ballard MIL-1553 Engine.lvlib"/>
-		<Item Name="Combined BC_RTs_BM_002.vi" Type="VI" URL="../../../Combined BC_RTs_BM_002.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="instr.lib" Type="Folder">
 				<Item Name="BTI1553LV.lvlib" Type="Library" URL="/&lt;instrlib&gt;/BTI1553Lib/BTI1553LV.lvlib"/>
@@ -376,7 +375,7 @@ AddOutputFilter chunkFilter
 				<Property Name="Bld_postActionVIID" Type="Ref">/My Computer/Utility/Copy .LLB to NI VeriStand dir.vi</Property>
 				<Property Name="Bld_previewCacheID" Type="Str">{7427BA53-37A7-485D-B293-ECFC7639515A}</Property>
 				<Property Name="Bld_targetDestDir" Type="Path">/Pharlap/Ballard - 1553 Engine.llb</Property>
-				<Property Name="Bld_version.build" Type="Int">247</Property>
+				<Property Name="Bld_version.build" Type="Int">254</Property>
 				<Property Name="Bld_version.major" Type="Int">1</Property>
 				<Property Name="Destination[0].destName" Type="Str">Destination Directory</Property>
 				<Property Name="Destination[0].path" Type="Path">/Pharlap/Ballard - 1553 Engine.llb</Property>
