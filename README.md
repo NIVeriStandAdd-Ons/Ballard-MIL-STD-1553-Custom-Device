@@ -1,10 +1,16 @@
 ### Ballard MIL-STD-1553 Custom Device ###
 
-**Ballard MIL-STD-1553 Custom Device** allows users to use the [Ballard MIL-STD-1553 devices](https://www.ni.com/en-ca/shop/select/pxi-mil-std-1553-interface-module) inside NI VeriStand. This is an avionic interface bus standard. It's important to note that supported hardware are the "NI-Keyed boards only" AND Multi-Function, product Part Numbers supported :
+**Ballard MIL-STD-1553 Custom Device** allows users to use the [Ballard MIL-STD-1553 devices]
+(https://www.ni.com/en-ca/shop/select/pxi-mil-std-1553-interface-module) inside NI VeriStand. This is an avionic interface bus 
+standard. It's important to note that supported hardware are the "NI-Keyed boards only" AND Multi-Function. 
+Product Part Numbers supported :
 -  LV-222-550-000
 -  LV-222-555-000
 -  LV-222-555-555
 
+The code uses the Sequential Monitor to monitor the records on the channels. It relies on Bus Monitor enabled. It's why we need a Multi-Function model. 
+
+It's not implemented in the current code but if a chronological mode was required, it could be added. Mechanism to read the traffic in a chronological manner is already in place and used in the Custom Device. The current code parses/consumes the read records and updates the respective NI-VeriStand Channels. Another consumer could be added to the code to log or share (via network for instance) the traffic.
 
 ### LabVIEW Version ###
 
@@ -12,7 +18,7 @@ LabVIEW 2017
 
 ### Built Availability ###
 
-Builds available for VeriStand 2017, 2018 & 2019 under releases.
+No Build available.
 
 ### Quality, Limitations ###
 
