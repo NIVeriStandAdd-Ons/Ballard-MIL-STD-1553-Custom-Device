@@ -40,7 +40,7 @@ This IP is new.
 
 Code uses 1 .NET Assembly compiled into a DLL. The source code is available here:
 
-	Hardware XML File: https://XXXXXXXXXX [TO BE COMPLETED]
+	Hardware XML File: https://github.com/NIVeriStandAdd-Ons/Ballard-MIL-STD-1553-Custom-Device/tree/master/Source/Assemblies/HW XML Files
 
 VIs must be renamed in BTI1553LV.lvlib to prevent naming collision during compilation see User Readme.rtf
 
