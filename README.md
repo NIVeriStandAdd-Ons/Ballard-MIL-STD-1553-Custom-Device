@@ -22,7 +22,13 @@ No Build available.
 
 ### Quality, Limitations ###
 
-This IP is new. 
+- This IP is new. 
+- This IP doesn't support Parameters (from and to Words). This is described in Issue #2.
+- Issues numbering, below 4, can refer to 2 different things (in the commits comments) as the repository was imported from a first private repository but issues not imported.
+
+### Hardware Configuration Files Examples ###
+
+This IP comes with some XML HW examples available here: https://github.com/NIVeriStandAdd-Ons/Ballard-MIL-STD-1553-Custom-Device/tree/master/Example%20Database
 
 ### Built Dependencies ###
 
