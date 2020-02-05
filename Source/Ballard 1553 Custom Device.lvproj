@@ -40,8 +40,12 @@
 		</Item>
 		<Item Name="Ballard 1553 Shared.lvlib" Type="Library" URL="../Shared/Ballard 1553 Shared.lvlib"/>
 		<Item Name="Ballard 1553 System Explorer.lvlib" Type="Library" URL="../System Explorer/Ballard 1553 System Explorer.lvlib"/>
+		<Item Name="Ballard Field Breakdown.vi" Type="VI" URL="/C/Users/Administrator/Desktop/Ballard Field Breakdown.vi"/>
 		<Item Name="Custom Device Ballard - 1553.xml" Type="Document" URL="../Custom Device Ballard - 1553.xml"/>
 		<Item Name="Dependencies" Type="Dependencies">
+			<Item Name="instr.lib" Type="Folder">
+				<Item Name="BTI1553LV.lvlib" Type="Library" URL="/&lt;instrlib&gt;/BTI1553Lib/BTI1553LV.lvlib"/>
+			</Item>
 			<Item Name="user.lib" Type="Folder">
 				<Item Name="MD5 F function__ogtk.vi" Type="VI" URL="/&lt;userlib&gt;/_OpenG.lib/md5/md5.llb/MD5 F function__ogtk.vi"/>
 				<Item Name="MD5 FGHI functions__ogtk.vi" Type="VI" URL="/&lt;userlib&gt;/_OpenG.lib/md5/md5.llb/MD5 FGHI functions__ogtk.vi"/>
@@ -122,6 +126,12 @@
 				<Item Name="Three Button Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Three Button Dialog.vi"/>
 				<Item Name="Trim Whitespace.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Trim Whitespace.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
+			</Item>
+			<Item Name="BTI1553LV.dll" Type="Document" URL="BTI1553LV.dll">
+				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
+			</Item>
+			<Item Name="BTICardLV.dll" Type="Document" URL="BTICardLV.dll">
+				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
 			</Item>
 			<Item Name="mscorlib" Type="VI" URL="mscorlib">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
@@ -377,7 +387,7 @@ AddOutputFilter chunkFilter
 				<Property Name="Bld_postActionVIID" Type="Ref">/My Computer/Utility/Copy .LLB to NI VeriStand dir.vi</Property>
 				<Property Name="Bld_previewCacheID" Type="Str">{7427BA53-37A7-485D-B293-ECFC7639515A}</Property>
 				<Property Name="Bld_targetDestDir" Type="Path">/Pharlap/Ballard - 1553 Engine.llb</Property>
-				<Property Name="Bld_version.build" Type="Int">259</Property>
+				<Property Name="Bld_version.build" Type="Int">265</Property>
 				<Property Name="Bld_version.major" Type="Int">1</Property>
 				<Property Name="Destination[0].destName" Type="Str">Destination Directory</Property>
 				<Property Name="Destination[0].path" Type="Path">/Pharlap/Ballard - 1553 Engine.llb</Property>
