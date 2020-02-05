@@ -12,6 +12,13 @@ The code uses the Sequential Monitor to monitor the records on the channels. It 
 
 It's not implemented in the current code but if a chronological mode was required, it could be added. Mechanism to read the traffic in a chronological manner is already in place and used in the Custom Device. The current code parses/consumes the read records and updates the respective NI-VeriStand Channels. Another consumer could be added to the code to log or share (via network for instance) the traffic.
 
+NOTES:
+- The BC and simulated RTs have some individual Command Channels to Start and Stop them. The Command execution is triggered when a "1" value is written on NI-VeriStand Channel (value comes back to 0 automatically).
+- For Acyclic frame(s), emission (one at a time) is triggered when a "1" value is written on associated Trigger NI-VeriStand Channel.
+- If accepted by user during HardWare XML Load, there are TimeStamp Channels whenever it's available. This directly comes from the read Record (the 1553 frame) returned by the driver. It's the board time. So, for one 1553 frame, same TimeStamp information can be written to several NI-VeriStand TimeStamp channels (TimeStamp Channel from BC, TimeSTamp Channel from RT(s)).
+- To support broadcast frames, user needs to define a Remote Terminal at TA Address = 31. There is an XML attribute "broadcast", at Channel level, which defines whether TA address is used for RT at address 31 or as the broadcast RT. Refer to Ballard documentation (Cf. XML Schema) for more information.
+
+
 ### LabVIEW Version ###
 
 LabVIEW 2017
@@ -22,13 +29,18 @@ No Build available.
 
 ### Quality, Limitations ###
 
-- This IP is new. 
+- This IP is new. Testing was done with XML examples available here.
 - This IP doesn't support Parameters (from and to Words). This is described in Issue #2.
-- Issues numbering, below 4, can refer to 2 different things (in the commits comments) as the repository was imported from a first private repository but issues not imported.
+- Github Issues numbering: below 4, can refer to 2 different things (in the commits comments) as the repository was imported from a first private repository but issues not imported.
+- Scenario we monitor RTs only (not simulated) has not been tested at all.
 
 ### Hardware Configuration Files Examples ###
 
 This IP comes with some XML HW examples available here: https://github.com/NIVeriStandAdd-Ons/Ballard-MIL-STD-1553-Custom-Device/tree/master/Example%20Database
+- "1553_HW_Reference_007.xml". This example doesn't need external wiring. This example shows different frame types including some broadcast. There is one BC and couple of RTs simulated on Channel 0.
+- "1553_HW_Reference_007_BC Ch0_RTs Ch1.xml". This example needs external wiring between Channel 0 and Channel 1. This example shows different frame types including some broadcast. There is one BC and couple of RTs simulated. BC runs on Channel 0 and RTs run on Channel 1.
+
+In XML file, it's important to note that Buffers attached to Messages need to have the right size, particularly for the RTs. The code detects the actual size of requested Buffer to figure-out the NI-VeriStand Channels to be allocated.
 
 ### Built Dependencies ###
 
