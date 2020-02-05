@@ -42,6 +42,13 @@ This IP comes with some XML HW examples available here: https://github.com/NIVer
 
 In XML file, it's important to note that Buffers attached to Messages need to have the right size, particularly for the RTs. The code detects the actual size of requested Buffer to figure-out the NI-VeriStand Channels to be allocated.
 
+### CPU Performances ###
+
+With example file "1553_HW_Reference_007_BC Ch0_RTs Ch1.xml" running under NI-VeriStand 2017, Primary Control Loop set at 1000 Hz, on a PXIe-8840 (dual core), without using Command channels or update data, here are code sections duration (in us) read in Channel Data Viewer:
+- Inline Read Time: 49 us;
+- Inline Write Time: 7 us;
+- Asynchronous Loop Time : 11 us. 
+
 ### Built Dependencies ###
 
 [Astronics Ballard LabVIEW Driver 1.2.0.2 or Higher] http://www.ni.com/download/ballard-pxie-omnibus-ii-1.2.0/8336/en/
